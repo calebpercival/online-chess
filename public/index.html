@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="style/css/main.css">
+        <title></title>
+    </head>
+    <body>
+        <h1>Online WebSocket Game</h1>
+        <button onclick="sendMessage()">send message to webscoket</button>
+    </body>
+    <script>
+        const socket = new WebSocket('ws://localhost:6060')
+
+        socket.addEventListener('open', function(event) {
+            console.log('connected to websocket server')
+        })
+
+        socket.addEventListener('message', function (event) {
+            console.log('message from server: ', event.data)
+        })
+
+        const sendMessage = () => {
+            socket.send('Test sending a message')
+        }
+    </script>
+</html>
