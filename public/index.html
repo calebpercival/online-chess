@@ -18,12 +18,12 @@
             console.log('connected to websocket server')
         })
 
-        socket.addEventListener('message', function (event) {
-            console.log('message from server: ', event.data)
-        })
+        socket.onmessage = function(event) {
+            console.log(JSON.parse(event.data))
+        }
 
         const sendMessage = () => {
-            socket.send('Test sending a message')
+            socket.send(JSON.stringify({message: 'Test sending a message'}))
         }
     </script>
 </html>
