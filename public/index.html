@@ -8,8 +8,23 @@
         <title></title>
     </head>
     <body>
+        <div id="joinGame" class="hide">
+            <div class="card">
+                <form id="joinForm">
+                    <label for="gameId">Enter Game ID: </label>
+                    <div>
+                        <input type="text" id="gameId" name="gameId" class="form-control col-sm-6">
+                    </div>
+                    <input type="submit" value="Join" class="btn btn-primary">        
+                </form>
+            </div>
+        </div>
+    <header>
         <h1>Online WebSocket Game</h1>
-        <button onclick="sendMessage()">send message to webscoket</button>
+        <button class="btn btn-primary" onclick="newGame()">New Game</button>
+        <button class="btn btn-primary" onclick="showJoinModal()">Join Game</button>
+    </header>
+        <button onclick="sendMessage()" class="btn btn-secondary">send message to webscoket</button>
     </body>
     <script>
         const socket = new WebSocket('ws://localhost:6060')
@@ -25,5 +40,32 @@
         const sendMessage = () => {
             socket.send(JSON.stringify({message: 'Test sending a message'}))
         }
+
+        function showJoinModal(){
+            document.getElementById('joinGame').classList.remove('hide')
+        }
+
+        function newGame(){
+            return fetch('/api/newGame', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body:JSON.stringify({gameId:13531335})
+            })
+            .then( res => {
+                window.location = '/?gameId='
+            })
+        }
+
+        let joinForm = document.getElementById('joinForm')
+        
+        joinForm.addEventListener('submit', (event) => {
+            // event.preventDefault()
+
+            // let data = new FormData(joinForm)
+            // document.location = "./game/"+data.gameId
+        })
+
     </script>
 </html>
