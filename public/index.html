@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+        <script src="./js/gameId.js"></script>
         <link rel="stylesheet" href="style/css/main.css">
         <title></title>
     </head>
@@ -45,17 +46,19 @@
             document.getElementById('joinGame').classList.remove('hide')
         }
 
+
         function newGame(){
+
             return fetch('/api/newGame', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body:JSON.stringify({gameId:13531335})
+                method: "POST"
             })
-            .then( res => {
-                window.location = '/?gameId='
+            .then( function(res) {
+                res.json().then(response => {
+                    console.log(response.id)
+                window.location = '/?gameId='+response.id
+                })
             })
+                
         }
 
         let joinForm = document.getElementById('joinForm')

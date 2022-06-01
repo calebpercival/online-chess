@@ -21,4 +21,17 @@ module.exports = {
       });
     });
   },
+
+  getById(newId, callback) {
+    DB.connect().then((db) => {
+      db.get("SELECT * FROM games Where id = ?", newId).then((result) => {
+        callback(result);
+        //   if (result) {
+        //     callback({ id: result.id });
+        //   } else {
+        //     callback({ id: result.id});
+        //   }
+      });
+    });
+  },
 };
