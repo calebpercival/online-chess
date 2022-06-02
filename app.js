@@ -33,19 +33,6 @@ app.use(express.json());
 //   games.getGame(req.params.id, callback);
 // });
 
-app.get("/testId/:id", function (req, res) {
-  games.testId(req.params.id, (result) => {
-    console.log(result);
-    res.send({ result: result });
-  });
-});
-
-// app.post("/api/newGame", function (req, res) {
-//   games.newGame(req.body.gameId, (result) => {
-//     res.send({ id: result });
-//   });
-// });
-
 app.post("/api/newGame", function (req, res) {
   let newId;
   let existingId;
@@ -63,6 +50,12 @@ app.post("/api/newGame", function (req, res) {
       }
     });
   } while (existingId == newId);
+});
+
+app.get("/api/getGame/:id", function (req, res) {
+  games.getById(req.params.id, (response) => {
+    res.send(response);
+  });
 });
 
 console.log("Server running on http://localhost:" + port);

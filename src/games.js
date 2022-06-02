@@ -22,15 +22,10 @@ module.exports = {
     });
   },
 
-  getById(newId, callback) {
+  getById(id, callback) {
     DB.connect().then((db) => {
-      db.get("SELECT * FROM games Where id = ?", newId).then((result) => {
+      db.get("SELECT * FROM games Where id = ?", id).then((result) => {
         callback(result);
-        //   if (result) {
-        //     callback({ id: result.id });
-        //   } else {
-        //     callback({ id: result.id});
-        //   }
       });
     });
   },

@@ -4,17 +4,39 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
-        <script src="./js/gameId.js"></script>
+        
         <link rel="stylesheet" href="style/css/main.css">
         <title></title>
     </head>
     <body>
-        <div id="joinGame" class="hide">
+        <div id="joinGame" class="modal hide">
             <div class="card">
                 <form id="joinForm">
                     <label for="gameId">Enter Game ID: </label>
                     <div>
                         <input type="text" id="gameId" name="gameId" class="form-control col-sm-6">
+                    </div>
+                    <input type="submit" value="Join" class="btn btn-primary">        
+                </form>
+            </div>
+        </div>
+        <div id="pickColour" class="modal hide">
+            <div class="card">
+                <div id="colourBtns">
+                    <button id="whiteBtn" class="btn btn-secondary">White</button>
+                    <button id="blackBtn" class="btn btn-secondary">Black</button>
+                </div>
+                <form id="passwordInput" class="hide">
+                    <label for="gameId">Enter Password: </label>
+                    <div>
+                        <input type="password" id="password" name="password" class="form-control col-sm-6">
+                    </div>
+                    <input type="submit" value="Join" class="btn btn-primary">        
+                </form>
+                <form id="setPassword" class="hide">
+                    <label for="gameId">Set a password so you can return to this game as the same player: </label>
+                    <div>
+                        <input type="password" id="newPassword" name="newPassword" class="form-control col-sm-6">
                     </div>
                     <input type="submit" value="Join" class="btn btn-primary">        
                 </form>
@@ -27,7 +49,10 @@
     </header>
         <button onclick="sendMessage()" class="btn btn-secondary">send message to webscoket</button>
     </body>
+    <script src="./js/newGame.js"></script>
+    <script src="./js/gameSetup.js"></script>
     <script>
+        
         const socket = new WebSocket('ws://localhost:6060')
 
         socket.addEventListener('open', function(event) {
@@ -44,21 +69,6 @@
 
         function showJoinModal(){
             document.getElementById('joinGame').classList.remove('hide')
-        }
-
-
-        function newGame(){
-
-            return fetch('/api/newGame', {
-                method: "POST"
-            })
-            .then( function(res) {
-                res.json().then(response => {
-                    console.log(response.id)
-                window.location = '/?gameId='+response.id
-                })
-            })
-                
         }
 
         let joinForm = document.getElementById('joinForm')
