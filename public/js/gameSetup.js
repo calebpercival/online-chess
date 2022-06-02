@@ -10,6 +10,8 @@ if (gameId !== null) {
       if (response) {
         gameData = response;
         document.getElementById("pickColour").classList.remove("hide");
+        document.getElementById("startButtons").classList.add("hide");
+        document.getElementById("leaveBtn").classList.remove("hide");
       }
     });
   });
@@ -61,16 +63,19 @@ setPasswordForm.addEventListener("submit", (event) => {
 
 inputPasswordForm.addEventListener("submit", (event) => {
   event.preventDefault();
-});
 
-//get password set form
-//on event submit
-//if chosen colour black
-//set password api request (gameid, "black", password)
-//set player colour
-//else
-//set password api request (gameid, "white", password)
-//set player colour
+  fetch(`/api/checkPassword`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      password: password,
+      player: chosenColour,
+      gameId: gameId,
+    }),
+  });
+});
 
 //get password input form
 //on event submit

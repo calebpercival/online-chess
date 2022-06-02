@@ -44,8 +44,11 @@
         </div>
     <header>
         <h1>Online WebSocket Game</h1>
-        <button class="btn btn-primary" onclick="newGame()">New Game</button>
-        <button class="btn btn-primary" onclick="showJoinModal()">Join Game</button>
+        <div id="startButtons">
+            <button class="btn btn-primary" onclick="newGame()">New Game</button>
+            <button class="btn btn-primary" onclick="showJoinModal()">Join Game</button>
+        </div>
+        <button id="leaveBtn" class="btn btn-primary  hide" onclick="leaveGame()">Leave Game</button>
     </header>
         <button onclick="sendMessage()" class="btn btn-secondary">send message to webscoket</button>
     </body>
@@ -72,6 +75,10 @@
         }
 
         let joinForm = document.getElementById('joinForm')
+
+        function leaveGame(){
+            window.location = "/"
+        }
         
         joinForm.addEventListener('submit', (event) => {
             // event.preventDefault()
