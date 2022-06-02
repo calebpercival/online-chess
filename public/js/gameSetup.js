@@ -40,10 +40,29 @@ document.getElementById("blackBtn").addEventListener("click", (event) => {
 
 setPasswordForm.addEventListener("submit", (event) => {
   event.preventDefault();
+
+  let newPassword = new FormData(setPasswordForm).get("newPassword");
+
+  fetch(`/api/setPassword`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      newPassword: newPassword,
+      player: chosenColour,
+      gameId: gameId,
+    }),
+  }).then(function () {
+    playersColour = chosenColour;
+    document.getElementById("pickColour").classList.add("hide");
+  });
 });
+
 inputPasswordForm.addEventListener("submit", (event) => {
   event.preventDefault();
 });
+
 //get password set form
 //on event submit
 //if chosen colour black

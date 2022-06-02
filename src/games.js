@@ -29,4 +29,14 @@ module.exports = {
       });
     });
   },
+
+  setPassword(newPassword, player, gameId) {
+    DB.connect().then((db) => {
+      db.run(
+        `UPDATE games SET ${player}_password = ? WHERE id = ?`,
+        newPassword,
+        gameId
+      );
+    });
+  },
 };
