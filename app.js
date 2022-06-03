@@ -60,7 +60,18 @@ app.get("/api/getGame/:id", function (req, res) {
 
 app.post("/api/setPassword", function (req, res) {
   games.setPassword(req.body.newPassword, req.body.player, req.body.gameId);
-  res.send(status);
+  res.send({});
+});
+
+app.post("/api/checkPassword", function (req, res) {
+  games.checkPassword(
+    req.body.password,
+    req.body.player,
+    req.body.gameId,
+    (response) => {
+      res.send(response);
+    }
+  );
 });
 
 console.log("Server running on http://localhost:" + port);

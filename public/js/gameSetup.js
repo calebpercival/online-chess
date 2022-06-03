@@ -64,6 +64,8 @@ setPasswordForm.addEventListener("submit", (event) => {
 inputPasswordForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
+  let password = new FormData(inputPasswordForm).get("password");
+
   fetch(`/api/checkPassword`, {
     method: "POST",
     headers: {
@@ -74,6 +76,13 @@ inputPasswordForm.addEventListener("submit", (event) => {
       player: chosenColour,
       gameId: gameId,
     }),
+  }).then(function (response) {
+    response.json().then((response) => {
+      if (response.password_match == true) {
+        document.getElementById("pickColour").classList.add("hide");
+      } else {
+      }
+    });
   });
 });
 

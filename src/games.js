@@ -39,4 +39,26 @@ module.exports = {
       );
     });
   },
+
+  checkPassword(password, player, gameId, callback) {
+    DB.connect().then((db) => {
+      db.get(`SELECT ${player}_password FROM games Where id = ?`, gameId).then(
+        (result) => {
+          if (player == "white") {
+            if (result.white_password == password) {
+              callback({ password_match: true });
+            } else {
+              callback({ password_match: false });
+            }
+          } else if (player == "black") {
+            if (result.black_password == password) {
+              callback({ password_match: true });
+            } else {
+              callback({ password_match: false });
+            }
+          }
+        }
+      );
+    });
+  },
 };
