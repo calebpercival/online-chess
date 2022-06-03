@@ -86,17 +86,14 @@ inputPasswordForm.addEventListener("submit", (event) => {
   });
 });
 
-//get password input form
-//on event submit
-//if chosen colour black
-//check password api request (gameid, "black", password)
-//.then( if response == true
-//set player colour
-//else
-//display error msg
-//else
-//check password api request (gameid, "white", password)
-//.then( if response == true
-//set player colour
-//else
-//display error msg
+//create game using chess.js
+import { Chess } from "chess.js";
+
+const chess = new Chess();
+
+while (!chess.game_over()) {
+  const moves = chess.moves();
+  const move = moves[Math.floor(Math.random() * moves.length)];
+  chess.move(move);
+}
+console.log(chess.pgn());

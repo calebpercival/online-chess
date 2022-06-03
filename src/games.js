@@ -1,4 +1,3 @@
-const { resourceUsage } = require("process");
 const DB = require("./database.js");
 
 module.exports = {
