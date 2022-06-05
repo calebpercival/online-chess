@@ -61,6 +61,8 @@ c.addEventListener(
       response.json().then((response) => {
         if (response.type != "none") {
           selectedSquare = chessCoodinates;
+        } else if (selectedSquare != null) {
+          // attempt to make move from selected square to chessCoordinates
         }
       });
     });
