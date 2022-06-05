@@ -1,91 +1,123 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
-        
-        <link rel="stylesheet" href="style/css/main.css">
-        <title></title>
-    </head>
-    <body>
-        <div id="joinGame" class="modal hide">
-            <div class="card">
-                <form id="joinForm">
-                    <label for="gameId">Enter Game ID: </label>
-                    <div>
-                        <input type="text" id="gameId" name="gameId" class="form-control col-sm-6">
-                    </div>
-                    <input type="submit" value="Join" class="btn btn-primary">        
-                </form>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"
+      integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style/css/main.css" />
+    <title></title>
+  </head>
+  <body>
+    <div id="joinGame" class="modal hide">
+      <div class="card">
+        <form id="joinForm">
+          <label for="gameId">Enter Game ID: </label>
+          <div>
+            <input
+              type="text"
+              id="gameId"
+              name="gameId"
+              class="form-control col-sm-6"
+            />
+          </div>
+          <input type="submit" value="Join" class="btn btn-primary" />
+        </form>
+      </div>
+    </div>
+    <div id="pickColour" class="modal hide">
+      <div class="card">
+        <div id="colourBtns">
+          <button id="whiteBtn" class="btn btn-secondary">White</button>
+          <button id="blackBtn" class="btn btn-secondary">Black</button>
         </div>
-        <div id="pickColour" class="modal hide">
-            <div class="card">
-                <div id="colourBtns">
-                    <button id="whiteBtn" class="btn btn-secondary">White</button>
-                    <button id="blackBtn" class="btn btn-secondary">Black</button>
-                </div>
-                <form id="passwordInput" class="hide">
-                    <label for="gameId">Enter Password: </label>
-                    <div>
-                        <input type="password" id="password" name="password" class="form-control col-sm-6">
-                    </div>
-                    <input type="submit" value="Join" class="btn btn-primary">        
-                </form>
-                <form id="setPassword" class="hide">
-                    <label for="gameId">Set a password so you can return to this game as the same player: </label>
-                    <div>
-                        <input type="password" id="newPassword" name="newPassword" class="form-control col-sm-6">
-                    </div>
-                    <input type="submit" value="Join" class="btn btn-primary">        
-                </form>
-            </div>
-        </div>
+        <form id="passwordInput" class="hide">
+          <label for="gameId">Enter Password: </label>
+          <div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control col-sm-6"
+            />
+          </div>
+          <input type="submit" value="Join" class="btn btn-primary" />
+        </form>
+        <form id="setPassword" class="hide">
+          <label for="gameId"
+            >Set a password so you can return to this game as the same player:
+          </label>
+          <div>
+            <input
+              type="password"
+              id="newPassword"
+              name="newPassword"
+              class="form-control col-sm-6"
+            />
+          </div>
+          <input type="submit" value="Join" class="btn btn-primary" />
+        </form>
+      </div>
+    </div>
     <header>
-        <h1>Online WebSocket Game</h1>
-        <div id="startButtons">
-            <button class="btn btn-primary" onclick="newGame()">New Game</button>
-            <button class="btn btn-primary" onclick="showJoinModal()">Join Game</button>
-        </div>
-        <button id="leaveBtn" class="btn btn-primary  hide" onclick="leaveGame()">Leave Game</button>
+      <h1>Online WebSocket Game</h1>
+      <div id="startButtons">
+        <button class="btn btn-primary" onclick="newGame()">New Game</button>
+        <button class="btn btn-primary" onclick="showJoinModal()">
+          Join Game
+        </button>
+      </div>
+      <button id="leaveBtn" class="btn btn-primary hide" onclick="leaveGame()">
+        Leave Game
+      </button>
     </header>
-        <button onclick="sendMessage()" class="btn btn-secondary">send message to webscoket</button>
-    </body>
-    <script src="./js/newGame.js"></script>
-    <script src="./js/gameSetup.js"></script>
-    <script>
-        
-        const socket = new WebSocket('ws://localhost:6060')
+    <canvas
+      id="chessBoard"
+      width="400"
+      height="400"
+      style="border: 2px solid #d3d3d3"
+    >
+      Your browser does not support the HTML5 canvas tag.</canvas
+    >
+    <button onclick="sendMessage()" class="btn btn-secondary">
+      send message to webscoket
+    </button>
+  </body>
+  <script src="./js/chessBoard.js"></script>
+  <script src="./js/newGame.js"></script>
+  <script src="./js/gameSetup.js"></script>
+  <script>
+    const socket = new WebSocket("ws://localhost:6060");
 
-        socket.addEventListener('open', function(event) {
-            console.log('connected to websocket server')
-        })
+    socket.addEventListener("open", function (event) {
+      console.log("connected to websocket server");
+    });
 
-        socket.onmessage = function(event) {
-            console.log(JSON.parse(event.data))
-        }
+    socket.onmessage = function (event) {
+      console.log(JSON.parse(event.data));
+    };
 
-        const sendMessage = () => {
-            socket.send(JSON.stringify({message: 'Test sending a message'}))
-        }
+    const sendMessage = () => {
+      socket.send(JSON.stringify({ message: "Test sending a message" }));
+    };
 
-        function showJoinModal(){
-            document.getElementById('joinGame').classList.remove('hide')
-        }
+    function showJoinModal() {
+      document.getElementById("joinGame").classList.remove("hide");
+    }
 
-        let joinForm = document.getElementById('joinForm')
+    let joinForm = document.getElementById("joinForm");
 
-        function leaveGame(){
-            window.location = "/"
-        }
-        
-        joinForm.addEventListener('submit', (event) => {
-            // event.preventDefault()
+    function leaveGame() {
+      window.location = "/";
+    }
 
-            // let data = new FormData(joinForm)
-            // document.location = "./game/"+data.gameId
-        })
-
-    </script>
+    joinForm.addEventListener("submit", (event) => {
+      // event.preventDefault()
+      // let data = new FormData(joinForm)
+      // document.location = "./game/"+data.gameId
+    });
+  </script>
 </html>

@@ -5,10 +5,13 @@ const server = require("http").createServer(app);
 const port = 6060;
 
 const games = require("./src/games.js");
+const chessGame = require("./src/chessGame.js");
 
 const WebSocket = require("ws");
 const { response } = require("express");
 const wss = new WebSocket.Server({ server: server });
+
+// const { default: Chess } = await import("chess.js");
 
 wss.on("connection", function connection(ws) {
   console.log("new client connected");
@@ -72,6 +75,11 @@ app.post("/api/checkPassword", function (req, res) {
       res.send(response);
     }
   );
+});
+
+app.post("/api/getPieceLocations", async function (req, res) {
+  let currentBoard = await chessGame.getPieceLocations(req.body.fen);
+  res.send(currentBoard);
 });
 
 console.log("Server running on http://localhost:" + port);

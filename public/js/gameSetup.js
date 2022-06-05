@@ -3,6 +3,7 @@ let gameId = params.get("gameId");
 let gameData;
 let chosenColour;
 let playersColour;
+let currentPiecePositions;
 
 if (gameId !== null) {
   fetch(`/api/getGame/${gameId}`).then(function (response) {
@@ -12,10 +13,41 @@ if (gameId !== null) {
         document.getElementById("pickColour").classList.remove("hide");
         document.getElementById("startButtons").classList.add("hide");
         document.getElementById("leaveBtn").classList.remove("hide");
+
+        //get piece positions
+        fetch(`/api/getPieceLocations`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fen: response.current_positions,
+          }),
+        }).then(function (response) {
+          response.json().then((response) => {
+            currentPiecePositions = response;
+            console.log(currentPiecePositions);
+          });
+        });
       }
     });
   });
 }
+//   //get piece positions
+//   fetch(`/api/getPieceLocations`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       fen: gameData.current_positions,
+//     }),
+//   }).then(function (response) {
+//     response.json().then((response) => {
+//       currentPiecePositions = response;
+//       console.log(currentPiecePositions);
+//     });
+//   });
 
 let setPasswordForm = document.getElementById("setPassword");
 let inputPasswordForm = document.getElementById("passwordInput");
@@ -85,15 +117,3 @@ inputPasswordForm.addEventListener("submit", (event) => {
     });
   });
 });
-
-//create game using chess.js
-import { Chess } from "chess.js";
-
-const chess = new Chess();
-
-while (!chess.game_over()) {
-  const moves = chess.moves();
-  const move = moves[Math.floor(Math.random() * moves.length)];
-  chess.move(move);
-}
-console.log(chess.pgn());
