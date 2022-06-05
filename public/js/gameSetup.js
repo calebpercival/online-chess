@@ -20,7 +20,7 @@ const sendMessage = () => {
 };
 
 const sendMove = () => {
-  socket.send(JSON.stringify({ type: "refresh" }));
+  socket.send(JSON.stringify({ type: "refresh", gameId: gameId }));
 };
 
 //canvas
@@ -295,8 +295,10 @@ inputPasswordForm.addEventListener("submit", (event) => {
 socket.onmessage = function (event) {
   console.log(JSON.parse(event.data).message.type);
   if (JSON.parse(event.data).message.type == "refresh") {
-    ctx.clearRect(0, 0, boardSize * 8, boardSize * 8);
-    drawBoard(boardSize);
-    refreshBoard();
+    if (JSON.parse(event.data).message.gameId == gameId) {
+      ctx.clearRect(0, 0, boardSize * 8, boardSize * 8);
+      drawBoard(boardSize);
+      refreshBoard();
+    }
   }
 };
