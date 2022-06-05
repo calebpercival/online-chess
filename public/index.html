@@ -122,19 +122,19 @@
   <script src="./js/newGame.js"></script>
   <script src="./js/gameSetup.js"></script>
   <script>
-    const socket = new WebSocket("ws://localhost:6060");
+    // const socket = new WebSocket("ws://localhost:6060");
 
-    socket.addEventListener("open", function (event) {
-      console.log("connected to websocket server");
-    });
+    // socket.addEventListener("open", function (event) {
+    //   console.log("connected to websocket server");
+    // });
 
-    socket.onmessage = function (event) {
-      console.log(JSON.parse(event.data));
-    };
+    // socket.onmessage = function (event) {
+    //   console.log(JSON.parse(event.data));
+    // };
 
-    const sendMessage = () => {
-      socket.send(JSON.stringify({ message: "Test sending a message" }));
-    };
+    // const sendMessage = () => {
+    //   socket.send(JSON.stringify({ message: "Test sending a message" }));
+    // };
 
     function showJoinModal() {
       document.getElementById("joinGame").classList.remove("hide");

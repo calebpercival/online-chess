@@ -6,6 +6,23 @@ let playersColour;
 let currentPiecePositions;
 let selectedSquare;
 
+//websocket
+const socket = new WebSocket("ws://localhost:6060");
+
+socket.addEventListener("open", function (event) {
+  console.log("connected to websocket server");
+});
+
+const sendMessage = () => {
+  socket.send(
+    JSON.stringify({ type: "message", message: "Test sending a message" })
+  );
+};
+
+const sendMove = () => {
+  socket.send(JSON.stringify({ type: "refresh" }));
+};
+
 //canvas
 var c = document.getElementById("chessBoard");
 var ctx = c.getContext("2d");
@@ -38,7 +55,6 @@ function drawPieces(pieces) {
   let pieceType;
   for (r = 0; r < 8; r++) {
     for (c = 0; c < 8; c++) {
-      console.log(pieces[r][c]);
       if (pieces[r][c] != null) {
         if (pieces[r][c].color == "w") {
           pieceColour = "white";
@@ -115,7 +131,6 @@ function makeMove(fen, from, to) {
     }),
   }).then(function (response) {
     response.json().then((response) => {
-      console.log(response);
       if (response.fen !== "none") {
         //update database
         fetch(`/api/updateGame`, {
@@ -135,6 +150,7 @@ function makeMove(fen, from, to) {
           refreshBoard();
 
           //send signal to websocket
+          sendMove();
         });
       }
     });
@@ -161,10 +177,8 @@ c.addEventListener(
       }),
     }).then(function (response) {
       response.json().then((response) => {
-        console.log(playersColour[0] + " " + response.color);
         if (response.type != "none" && response.color == playersColour[0]) {
           selectedSquare = chessCoodinates;
-          console.log(selectedSquare);
           //call function to show valid moves
         } else if (selectedSquare != null) {
           makeMove(gameData.current_positions, selectedSquare, chessCoodinates); // attempt to make move from selected square to chessCoordinates
@@ -277,3 +291,12 @@ inputPasswordForm.addEventListener("submit", (event) => {
     });
   });
 });
+
+socket.onmessage = function (event) {
+  console.log(JSON.parse(event.data).message.type);
+  if (JSON.parse(event.data).message.type == "refresh") {
+    ctx.clearRect(0, 0, boardSize * 8, boardSize * 8);
+    drawBoard(boardSize);
+    refreshBoard();
+  }
+};

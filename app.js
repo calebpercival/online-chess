@@ -21,7 +21,8 @@ wss.on("connection", function connection(ws) {
     console.log("recieved: %s", data);
     wss.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
-        let message = JSON.parse(data).message;
+        let message = JSON.parse(data);
+        console.log(message);
         client.send(JSON.stringify({ message }));
       }
     });
