@@ -108,5 +108,11 @@ app.post("/api/makeMove", async function (req, res) {
   }
 });
 
+app.post("/api/updateGame", async function (req, res) {
+  games.updateGame(req.body.gameId, req.body.fen, (result) => {
+    res.send({});
+  });
+});
+
 console.log("Server running on http://localhost:" + port);
 server.listen(port);

@@ -27,6 +27,17 @@ function makeMove(fen, from, to) {
         //call drawboard
         //call getPieceLocations api with new fen
         //call draw pieces
+
+        fetch(`/api/updateGame`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            gameId: gameId,
+            fen: response.fen,
+          }),
+        });
       }
     });
   });
@@ -67,9 +78,10 @@ c.addEventListener(
     let chessBoardY = 8 - Math.floor(y / boardSize);
     let chessBoardX = String.fromCharCode(96 + Math.ceil(x / boardSize));
     let chessCoodinates = chessBoardX + chessBoardY.toString();
-    console.log(chessCoodinates);
 
-    console.log(currentPiecePositions);
+    // console.log(chessCoodinates);
+    // console.log(currentPiecePositions);
+
     fetch(`/api/getSquare`, {
       method: "POST",
       headers: {
@@ -83,6 +95,7 @@ c.addEventListener(
       response.json().then((response) => {
         if (response.type != "none") {
           selectedSquare = chessCoodinates;
+          console.log(selectedSquare);
           //call function to show valid moves
         } else if (selectedSquare != null) {
           makeMove(gameData.current_positions, selectedSquare, chessCoodinates); // attempt to make move from selected square to chessCoordinates
