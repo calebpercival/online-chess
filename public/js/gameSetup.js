@@ -4,9 +4,98 @@ let gameData;
 let chosenColour;
 let playersColour;
 let currentPiecePositions;
+//canvas
+var c = document.getElementById("chessBoard");
+var ctx = c.getContext("2d");
+
+let boardSize = 50;
+
+function drawBoard(boardSize) {
+  for (row = 0; row < 8; row++) {
+    for (col = 0; col < 8; col++) {
+      if (row % 2 == 0) {
+        if (col % 2 == 0) {
+          ctx.fillStyle = "white";
+        } else {
+          ctx.fillStyle = "#444444";
+        }
+      } else {
+        if (col % 2 == 0) {
+          ctx.fillStyle = "#444444";
+        } else {
+          ctx.fillStyle = "white";
+        }
+      }
+      ctx.fillRect(boardSize * col, boardSize * row, boardSize, boardSize);
+    }
+  }
+}
+
+c.addEventListener(
+  "click",
+  function (event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    let chessBoardY = 8 - Math.floor(y / boardSize); //toString(y / boardSize);
+    let chessBoardX = String.fromCharCode(96 + Math.ceil(x / boardSize));
+    let chessCoodinates = chessBoardX + chessBoardY.toString();
+    console.log(chessCoodinates);
+  },
+  false
+);
+
+// function drawKing
+
+function drawPieces(pieces) {
+  //for each object in array
+  // x coord = (square[0].charCodeAt(0) - 96) * boardSize
+  // y coord = square[2].toInt() * boardSize
+  // if( color = w){ pieceColour = "white"} else if (color = b){ pieceColor = "black"}
+  // if(type = r){ draw ${pieceColor}rook }
+  let pieceColor;
+  let pieceType;
+  for (r = 0; r < 8; r++) {
+    for (c = 0; c < 8; c++) {
+      console.log(pieces[r][c]);
+      if (pieces[r][c] != null) {
+        if (pieces[r][c].color == "w") {
+          pieceColour = "white";
+        } else if (pieces[r][c].color == "b") {
+          pieceColour = "black";
+        }
+
+        if (pieces[r][c].type == "p") {
+          pieceType = "pawn";
+        } else if (pieces[r][c].type == "k") {
+          pieceType = "king";
+        } else if (pieces[r][c].type == "q") {
+          pieceType = "queen";
+        } else if (pieces[r][c].type == "r") {
+          pieceType = "rook";
+        } else if (pieces[r][c].type == "n") {
+          pieceType = "knight";
+        } else if (pieces[r][c].type == "b") {
+          pieceType = "bishop";
+        }
+
+        console.log(r, pieceColour, pieces[r][c].color);
+        ctx.drawImage(
+          document.getElementById(pieceType + "_" + pieceColour),
+          c * 50,
+          r * 50,
+          boardSize,
+          boardSize
+        );
+      }
+    }
+  }
+}
+
+drawBoard(boardSize);
 
 if (gameId !== null) {
   fetch(`/api/getGame/${gameId}`).then(function (response) {
+    //gets game data from database
     response.json().then((response) => {
       if (response) {
         gameData = response;
@@ -26,7 +115,8 @@ if (gameId !== null) {
         }).then(function (response) {
           response.json().then((response) => {
             currentPiecePositions = response;
-            console.log(currentPiecePositions);
+
+            drawPieces(currentPiecePositions);
           });
         });
       }
