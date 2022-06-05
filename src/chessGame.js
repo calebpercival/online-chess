@@ -27,4 +27,15 @@ const getPieceLocations = async (fen) => {
   return board;
 };
 
-module.exports = { getPieceLocations };
+const getSquareStatus = async (fen, coordinate) => {
+  ({ Chess } = await import("chess.js")).Chess;
+
+  const chess = new Chess();
+  chess.load(fen);
+
+  let piece = chess.get(coordinate);
+
+  return piece;
+};
+
+module.exports = { getPieceLocations, getSquareStatus };

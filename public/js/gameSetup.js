@@ -4,6 +4,7 @@ let gameData;
 let chosenColour;
 let playersColour;
 let currentPiecePositions;
+let selectedSquare;
 //canvas
 var c = document.getElementById("chessBoard");
 var ctx = c.getContext("2d");
@@ -40,6 +41,29 @@ c.addEventListener(
     let chessBoardX = String.fromCharCode(96 + Math.ceil(x / boardSize));
     let chessCoodinates = chessBoardX + chessBoardY.toString();
     console.log(chessCoodinates);
+
+    //fetch getSquare
+    //if not null
+    // set selected square
+    //else if not null and selected square not null
+    //attempt to move
+    console.log(currentPiecePositions);
+    fetch(`/api/getSquare`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fen: gameData.current_positions,
+        coordinates: chessCoodinates,
+      }),
+    }).then(function (response) {
+      response.json().then((response) => {
+        if (response.type != "none") {
+          selectedSquare = chessCoodinates;
+        }
+      });
+    });
   },
   false
 );

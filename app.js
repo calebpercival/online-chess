@@ -82,5 +82,18 @@ app.post("/api/getPieceLocations", async function (req, res) {
   res.send(currentBoard);
 });
 
+app.post("/api/getSquare", async function (req, res) {
+  //returns piece on square
+  let piece = await chessGame.getSquareStatus(
+    req.body.fen,
+    req.body.coordinates
+  );
+  if (piece == null) {
+    res.send({ type: "none" });
+  } else {
+    res.send(piece);
+  }
+});
+
 console.log("Server running on http://localhost:" + port);
 server.listen(port);
