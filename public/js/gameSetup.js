@@ -36,7 +36,7 @@ c.addEventListener(
   function (event) {
     var x = event.offsetX;
     var y = event.offsetY;
-    let chessBoardY = 8 - Math.floor(y / boardSize); //toString(y / boardSize);
+    let chessBoardY = 8 - Math.floor(y / boardSize);
     let chessBoardX = String.fromCharCode(96 + Math.ceil(x / boardSize));
     let chessCoodinates = chessBoardX + chessBoardY.toString();
     console.log(chessCoodinates);
@@ -44,14 +44,7 @@ c.addEventListener(
   false
 );
 
-// function drawKing
-
 function drawPieces(pieces) {
-  //for each object in array
-  // x coord = (square[0].charCodeAt(0) - 96) * boardSize
-  // y coord = square[2].toInt() * boardSize
-  // if( color = w){ pieceColour = "white"} else if (color = b){ pieceColor = "black"}
-  // if(type = r){ draw ${pieceColor}rook }
   let pieceColor;
   let pieceType;
   for (r = 0; r < 8; r++) {
@@ -123,21 +116,6 @@ if (gameId !== null) {
     });
   });
 }
-//   //get piece positions
-//   fetch(`/api/getPieceLocations`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       fen: gameData.current_positions,
-//     }),
-//   }).then(function (response) {
-//     response.json().then((response) => {
-//       currentPiecePositions = response;
-//       console.log(currentPiecePositions);
-//     });
-//   });
 
 let setPasswordForm = document.getElementById("setPassword");
 let inputPasswordForm = document.getElementById("passwordInput");
