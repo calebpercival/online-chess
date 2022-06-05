@@ -5,6 +5,33 @@ let chosenColour;
 let playersColour;
 let currentPiecePositions;
 let selectedSquare;
+
+function makeMove(fen, from, to) {
+  fetch(`/api/makeMove`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fen: fen,
+      from: from,
+      to: to,
+    }),
+  }).then(function (response) {
+    response.json().then((response) => {
+      console.log(response);
+      if (response.fen !== "none") {
+        //call api to update database
+        //set selectedsquare to null
+        //send signal to websocket
+        //call drawboard
+        //call getPieceLocations api with new fen
+        //call draw pieces
+      }
+    });
+  });
+}
+
 //canvas
 var c = document.getElementById("chessBoard");
 var ctx = c.getContext("2d");
@@ -42,11 +69,6 @@ c.addEventListener(
     let chessCoodinates = chessBoardX + chessBoardY.toString();
     console.log(chessCoodinates);
 
-    //fetch getSquare
-    //if not null
-    // set selected square
-    //else if not null and selected square not null
-    //attempt to move
     console.log(currentPiecePositions);
     fetch(`/api/getSquare`, {
       method: "POST",
@@ -61,8 +83,9 @@ c.addEventListener(
       response.json().then((response) => {
         if (response.type != "none") {
           selectedSquare = chessCoodinates;
+          //call function to show valid moves
         } else if (selectedSquare != null) {
-          // attempt to make move from selected square to chessCoordinates
+          makeMove(gameData.current_positions, selectedSquare, chessCoodinates); // attempt to make move from selected square to chessCoordinates
         }
       });
     });

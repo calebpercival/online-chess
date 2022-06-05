@@ -95,5 +95,18 @@ app.post("/api/getSquare", async function (req, res) {
   }
 });
 
+app.post("/api/makeMove", async function (req, res) {
+  let newFen = await chessGame.makeMove(
+    req.body.fen,
+    req.body.from,
+    req.body.to
+  );
+  if (newFen == "invalid") {
+    res.send({ fen: "none" });
+  } else {
+    res.send({ fen: newFen });
+  }
+});
+
 console.log("Server running on http://localhost:" + port);
 server.listen(port);
