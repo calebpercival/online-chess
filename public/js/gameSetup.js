@@ -117,13 +117,6 @@ function makeMove(fen, from, to) {
     response.json().then((response) => {
       console.log(response);
       if (response.fen !== "none") {
-        //call api to update database
-        //set selectedsquare to null
-        //send signal to websocket
-        //call drawboard
-        //call getPieceLocations api with new fen
-        //call draw pieces
-
         //update database
         fetch(`/api/updateGame`, {
           method: "POST",
@@ -140,6 +133,8 @@ function makeMove(fen, from, to) {
           //redraw board
           drawBoard(boardSize);
           refreshBoard();
+
+          //send signal to websocket
         });
       }
     });
