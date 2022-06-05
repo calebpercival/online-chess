@@ -6,43 +6,6 @@ let playersColour;
 let currentPiecePositions;
 let selectedSquare;
 
-function makeMove(fen, from, to) {
-  fetch(`/api/makeMove`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      fen: fen,
-      from: from,
-      to: to,
-    }),
-  }).then(function (response) {
-    response.json().then((response) => {
-      console.log(response);
-      if (response.fen !== "none") {
-        //call api to update database
-        //set selectedsquare to null
-        //send signal to websocket
-        //call drawboard
-        //call getPieceLocations api with new fen
-        //call draw pieces
-
-        fetch(`/api/updateGame`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            gameId: gameId,
-            fen: response.fen,
-          }),
-        });
-      }
-    });
-  });
-}
-
 //canvas
 var c = document.getElementById("chessBoard");
 var ctx = c.getContext("2d");
@@ -68,6 +31,119 @@ function drawBoard(boardSize) {
       ctx.fillRect(boardSize * col, boardSize * row, boardSize, boardSize);
     }
   }
+}
+
+function drawPieces(pieces) {
+  let pieceColor;
+  let pieceType;
+  for (r = 0; r < 8; r++) {
+    for (c = 0; c < 8; c++) {
+      console.log(pieces[r][c]);
+      if (pieces[r][c] != null) {
+        if (pieces[r][c].color == "w") {
+          pieceColour = "white";
+        } else if (pieces[r][c].color == "b") {
+          pieceColour = "black";
+        }
+
+        if (pieces[r][c].type == "p") {
+          pieceType = "pawn";
+        } else if (pieces[r][c].type == "k") {
+          pieceType = "king";
+        } else if (pieces[r][c].type == "q") {
+          pieceType = "queen";
+        } else if (pieces[r][c].type == "r") {
+          pieceType = "rook";
+        } else if (pieces[r][c].type == "n") {
+          pieceType = "knight";
+        } else if (pieces[r][c].type == "b") {
+          pieceType = "bishop";
+        }
+
+        ctx.drawImage(
+          document.getElementById(pieceType + "_" + pieceColour),
+          c * 50,
+          r * 50,
+          boardSize,
+          boardSize
+        );
+      }
+    }
+  }
+}
+
+function refreshBoard() {
+  if (gameId !== null) {
+    fetch(`/api/getGame/${gameId}`).then(function (response) {
+      //gets game data from database
+      response.json().then((response) => {
+        if (response) {
+          gameData = response;
+
+          //get piece positions
+          fetch(`/api/getPieceLocations`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fen: response.current_positions,
+            }),
+          }).then(function (response) {
+            response.json().then((response) => {
+              currentPiecePositions = response;
+
+              drawPieces(currentPiecePositions);
+            });
+          });
+        }
+      });
+    });
+  }
+}
+
+function makeMove(fen, from, to) {
+  fetch(`/api/makeMove`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fen: fen,
+      from: from,
+      to: to,
+    }),
+  }).then(function (response) {
+    response.json().then((response) => {
+      console.log(response);
+      if (response.fen !== "none") {
+        //call api to update database
+        //set selectedsquare to null
+        //send signal to websocket
+        //call drawboard
+        //call getPieceLocations api with new fen
+        //call draw pieces
+
+        //update database
+        fetch(`/api/updateGame`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            gameId: gameId,
+            fen: response.fen,
+          }),
+        }).then(function () {
+          selectedSquare = null;
+
+          //redraw board
+          drawBoard(boardSize);
+          refreshBoard();
+        });
+      }
+    });
+  });
 }
 
 c.addEventListener(
@@ -105,46 +181,6 @@ c.addEventListener(
   },
   false
 );
-
-function drawPieces(pieces) {
-  let pieceColor;
-  let pieceType;
-  for (r = 0; r < 8; r++) {
-    for (c = 0; c < 8; c++) {
-      console.log(pieces[r][c]);
-      if (pieces[r][c] != null) {
-        if (pieces[r][c].color == "w") {
-          pieceColour = "white";
-        } else if (pieces[r][c].color == "b") {
-          pieceColour = "black";
-        }
-
-        if (pieces[r][c].type == "p") {
-          pieceType = "pawn";
-        } else if (pieces[r][c].type == "k") {
-          pieceType = "king";
-        } else if (pieces[r][c].type == "q") {
-          pieceType = "queen";
-        } else if (pieces[r][c].type == "r") {
-          pieceType = "rook";
-        } else if (pieces[r][c].type == "n") {
-          pieceType = "knight";
-        } else if (pieces[r][c].type == "b") {
-          pieceType = "bishop";
-        }
-
-        console.log(r, pieceColour, pieces[r][c].color);
-        ctx.drawImage(
-          document.getElementById(pieceType + "_" + pieceColour),
-          c * 50,
-          r * 50,
-          boardSize,
-          boardSize
-        );
-      }
-    }
-  }
-}
 
 drawBoard(boardSize);
 
