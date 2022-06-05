@@ -150,9 +150,6 @@ c.addEventListener(
     let chessBoardX = String.fromCharCode(96 + Math.ceil(x / boardSize));
     let chessCoodinates = chessBoardX + chessBoardY.toString();
 
-    // console.log(chessCoodinates);
-    // console.log(currentPiecePositions);
-
     fetch(`/api/getSquare`, {
       method: "POST",
       headers: {
@@ -164,7 +161,8 @@ c.addEventListener(
       }),
     }).then(function (response) {
       response.json().then((response) => {
-        if (response.type != "none") {
+        console.log(playersColour[0] + " " + response.color);
+        if (response.type != "none" && response.color == playersColour[0]) {
           selectedSquare = chessCoodinates;
           console.log(selectedSquare);
           //call function to show valid moves
@@ -272,6 +270,7 @@ inputPasswordForm.addEventListener("submit", (event) => {
   }).then(function (response) {
     response.json().then((response) => {
       if (response.password_match == true) {
+        playersColour = chosenColour;
         document.getElementById("pickColour").classList.add("hide");
       } else {
       }
