@@ -115,5 +115,21 @@ app.post("/api/updateGame", async function (req, res) {
   });
 });
 
+app.post("/api/setStatus", async function (req, res) {
+  games.setStatus(req.body.gameId, req.body.status, (result) => {
+    res.send({});
+  });
+});
+
+app.post("/api/currentTurn", async function (req, res) {
+  let turn = await chessGame.currentTurn(req.body.fen);
+  res.send({ colour: turn });
+});
+
+app.post("/api/gameStatus", async function (req, res) {
+  let status = await chessGame.gameStatus(req.body.fen);
+  res.send(status);
+});
+
 console.log("Server running on http://localhost:" + port);
 server.listen(port);

@@ -11141,4 +11141,26 @@ textarea.form-control-lg {
   display: none !important;
 }
 
+#canvasContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#turn,
+#outcome {
+  text-align: center;
+}
+
+#turn {
+  margin-top: 20px;
+}
+
 /*# sourceMappingURL=main.css.map */

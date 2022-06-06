@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="style/css/main.css" />
     <title></title>
   </head>
-  <body>
+  <body class="container">
     <div id="joinGame" class="modal hide">
       <div class="card">
         <form id="joinForm">
@@ -63,28 +63,37 @@
       </div>
     </div>
     <header>
-      <h1>Online WebSocket Game</h1>
+      <h1>Online Chess</h1>
       <div id="startButtons">
         <button class="btn btn-primary" onclick="newGame()">New Game</button>
         <button class="btn btn-primary" onclick="showJoinModal()">
           Join Game
         </button>
       </div>
-      <button id="leaveBtn" class="btn btn-primary hide" onclick="leaveGame()">
-        Leave Game
-      </button>
+      <div id="inGameButtons" class="hide">
+        <button id="resignBtn" class="btn btn-secondary">Resign</button>
+        <button id="leaveBtn" class="btn btn-primary" onclick="leaveGame()">
+          Leave Game
+        </button>
+      </div>
     </header>
-    <canvas
-      id="chessBoard"
-      width="400"
-      height="400"
-      style="border: 2px solid #d3d3d3"
-    >
-      Your browser does not support the HTML5 canvas tag.</canvas
-    >
+
+    <div id="turn"></div>
+    <div id="canvasContainer">
+      <canvas
+        id="chessBoard"
+        width="400"
+        height="400"
+        style="border: 2px solid #d3d3d3"
+      >
+        Your browser does not support the HTML5 canvas tag.</canvas
+      >
+    </div>
+    <div id="outcome"></div>
+    <!-- 
     <button onclick="sendMessage()" class="btn btn-secondary">
       send message to webscoket
-    </button>
+    </button> -->
     <img id="pawn_white" class="hide" src="./images/pawn_white.png" alt="" />
     <img id="pawn_black" class="hide" src="./images/pawn_black.png" alt="" />
     <img id="king_white" class="hide" src="./images/king_white.png" alt="" />

@@ -88,6 +88,71 @@ function drawPieces(pieces) {
   }
 }
 
+function displayStatus(status) {
+  let winner;
+
+  document.getElementById("outcome").textContent = status;
+
+  if (status == "Draw") {
+    document.getElementById("outcome").textContent = "Game Over! It's a Draw";
+  } else if (status == "Checkmate") {
+    fetch(`/api/getGame/${gameId}`).then(function (response) {
+      response.json().then((response) => {
+        fetch(`/api/currentTurn`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fen: response.current_positions,
+          }),
+        }).then(function (response) {
+          response.json().then((response) => {
+            if (response.colour == "w") {
+              winner = "White";
+            } else {
+              winner = "Black";
+            }
+
+            document.getElementById("outcome").textContent =
+              status + "! " + winner + " Wins";
+          });
+        });
+      });
+    });
+  }
+}
+
+function displayTurn() {
+  //display what players turn it is
+  if (gameId !== null) {
+    fetch(`/api/getGame/${gameId}`).then(function (response) {
+      //gets game data from database
+      response.json().then((response) => {
+        fetch(`/api/currentTurn`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fen: response.current_positions,
+          }),
+        }).then(function (response) {
+          response.json().then((response) => {
+            if (response.colour == "w") {
+              document.getElementById("turn").textContent = "White's Turn";
+            } else {
+              document.getElementById("turn").textContent = "Black's Turn";
+            }
+          });
+        });
+      });
+    });
+  }
+}
+
+displayTurn();
+
 function refreshBoard() {
   if (gameId !== null) {
     fetch(`/api/getGame/${gameId}`).then(function (response) {
@@ -112,6 +177,36 @@ function refreshBoard() {
               drawPieces(currentPiecePositions);
             });
           });
+
+          //test for game over
+          fetch(`/api/gameStatus`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fen: response.current_positions,
+            }),
+          }).then(function (response) {
+            response.json().then((response) => {
+              console.log(response);
+
+              displayStatus(response.status);
+
+              fetch(`/api/setStatus`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  gameId: gameId,
+                  status: response.status,
+                }),
+              });
+            });
+          });
+          displayTurn();
+          displayStatus(response.status);
         }
       });
     });
@@ -199,7 +294,7 @@ if (gameId !== null) {
         gameData = response;
         document.getElementById("pickColour").classList.remove("hide");
         document.getElementById("startButtons").classList.add("hide");
-        document.getElementById("leaveBtn").classList.remove("hide");
+        document.getElementById("inGameButtons").classList.remove("hide");
 
         //get piece positions
         fetch(`/api/getPieceLocations`, {
@@ -215,6 +310,34 @@ if (gameId !== null) {
             currentPiecePositions = response;
 
             drawPieces(currentPiecePositions);
+          });
+        });
+
+        //test for game over
+        fetch(`/api/gameStatus`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fen: response.current_positions,
+          }),
+        }).then(function (response) {
+          response.json().then((response) => {
+            console.log(response);
+
+            displayStatus(response.status);
+
+            fetch(`/api/setStatus`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                gameId: gameId,
+                status: response.status,
+              }),
+            });
           });
         });
       }

@@ -45,6 +45,16 @@ module.exports = {
     });
   },
 
+  setStatus(gameId, status, callback) {
+    DB.connect().then((db) => {
+      db.run("UPDATE games SET status = ? WHERE id = ?", status, gameId).then(
+        () => {
+          callback({});
+        }
+      );
+    });
+  },
+
   getById(id, callback) {
     DB.connect().then((db) => {
       db.get("SELECT * FROM games Where id = ?", id).then((result) => {
