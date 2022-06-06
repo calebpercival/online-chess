@@ -11,6 +11,7 @@
   display: flex;
   .card {
     padding: 40px;
+    align-items: center;
   }
   form {
     display: flex;
@@ -43,4 +44,8 @@ header {
 
 #turn {
   margin-top: 20px;
+}
+
+#gameLink {
+  margin-bottom: 20px;
 }

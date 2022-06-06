@@ -30,6 +30,8 @@
     </div>
     <div id="pickColour" class="modal hide">
       <div class="card">
+        <div id="Id">a</div>
+        <div id="gameLink">a</div>
         <div id="colourBtns">
           <button id="whiteBtn" class="btn btn-secondary">White</button>
           <button id="blackBtn" class="btn btn-secondary">Black</button>
@@ -86,14 +88,11 @@
         height="400"
         style="border: 2px solid #d3d3d3"
       >
-        Your browser does not support the HTML5 canvas tag.</canvas
+        Your browser does not support the HTML5 canvas.</canvas
       >
     </div>
     <div id="outcome"></div>
-    <!-- 
-    <button onclick="sendMessage()" class="btn btn-secondary">
-      send message to webscoket
-    </button> -->
+
     <img id="pawn_white" class="hide" src="./images/pawn_white.png" alt="" />
     <img id="pawn_black" class="hide" src="./images/pawn_black.png" alt="" />
     <img id="king_white" class="hide" src="./images/king_white.png" alt="" />
@@ -127,24 +126,9 @@
       alt=""
     />
   </body>
-  <script src="./js/chessBoard.js"></script>
   <script src="./js/newGame.js"></script>
-  <script src="./js/gameSetup.js"></script>
+  <script src="./js/game.js"></script>
   <script>
-    // const socket = new WebSocket("ws://localhost:6060");
-
-    // socket.addEventListener("open", function (event) {
-    //   console.log("connected to websocket server");
-    // });
-
-    // socket.onmessage = function (event) {
-    //   console.log(JSON.parse(event.data));
-    // };
-
-    // const sendMessage = () => {
-    //   socket.send(JSON.stringify({ message: "Test sending a message" }));
-    // };
-
     function showJoinModal() {
       document.getElementById("joinGame").classList.remove("hide");
     }
@@ -154,11 +138,5 @@
     function leaveGame() {
       window.location = "/";
     }
-
-    joinForm.addEventListener("submit", (event) => {
-      // event.preventDefault()
-      // let data = new FormData(joinForm)
-      // document.location = "./game/"+data.gameId
-    });
   </script>
 </html>

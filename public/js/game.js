@@ -6,6 +6,9 @@ let playersColour;
 let currentPiecePositions;
 let selectedSquare;
 
+document.getElementById("gameLink").textContent =
+  "Join link: http://localhost:6060/?gameId=" + gameId;
+document.getElementById("Id").textContent = "Your Game ID is: " + gameId;
 //websocket
 const socket = new WebSocket("ws://localhost:6060");
 
@@ -109,9 +112,9 @@ function displayStatus(status) {
         }).then(function (response) {
           response.json().then((response) => {
             if (response.colour == "w") {
-              winner = "White";
-            } else {
               winner = "Black";
+            } else {
+              winner = "White";
             }
 
             document.getElementById("outcome").textContent =

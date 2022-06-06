@@ -11130,6 +11130,7 @@ textarea.form-control-lg {
 }
 .modal .card {
   padding: 40px;
+  align-items: center;
 }
 .modal form {
   display: flex;
@@ -11161,6 +11162,10 @@ header {
 
 #turn {
   margin-top: 20px;
+}
+
+#gameLink {
+  margin-bottom: 20px;
 }
 
 /*# sourceMappingURL=main.css.map */
